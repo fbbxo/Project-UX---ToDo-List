@@ -39,4 +39,4 @@ Estudantes, profissionais e entusiastas de produtividade que buscam uma ferramen
 **Local:** Palmas, Tocantins  
 
 ## 📅 Data
-16 de Março de 2026
+3 de Março de 2026 --> 17 de Março de 2026
