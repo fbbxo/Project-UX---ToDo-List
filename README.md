@@ -35,7 +35,8 @@ Estudantes, profissionais e entusiastas de produtividade que buscam uma ferramen
 
 ## 👤 Autor
 **Nome:** Fabio de Azevedo Moreira Filho  
-**Curso:** Sistemas para Internet - Aula - Projeto de Interface Web 
+**Curso:** Sistemas para Internet - Aula - Projeto de Interface Web
+
 **Local:** Palmas, Tocantins  
 
 ## 📅 Data
