@@ -3,228 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App Pro - Final Edition</title>
+    <title>FocusFlow Pro - Analytics Fix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; }
-        .app-container { width: 375px; height: 750px; position: relative; overflow: hidden; }
-        .screen { display: none; height: 100%; flex-direction: column; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%); }
+        .app-container { width: 375px; height: 780px; position: relative; overflow: hidden; background: #f8fafc; }
+        .screen { display: none; height: 100%; flex-direction: column; animation: fadeIn 0.3s ease-out; }
         .active-screen { display: flex; }
-        #pie-chart { border-radius: 50%; transition: background 0.5s ease; }
-        .priority-1 { border-left: 4px solid #ef4444; } 
-        .priority-2 { border-left: 4px solid #f59e0b; } 
-        .priority-3 { border-left: 4px solid #10b981; } 
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .priority-1 { border-left: 5px solid #ef4444; } 
+        .priority-2 { border-left: 5px solid #f59e0b; } 
+        .priority-3 { border-left: 5px solid #10b981; }
+        .modern-input { border-bottom: 2px solid #e2e8f0; transition: all 0.2s; background: transparent; outline: none; }
+        .modern-input:focus { border-bottom-color: #fbbf24; }
+        .btn-primary { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); }
+        .task-card { transition: transform 0.2s; cursor: pointer; background: white; }
+        .task-card:hover { transform: translateY(-2px); }
+        #global-add-btn { position: absolute; bottom: 110px; right: 24px; z-index: 40; }
+        .modal-field { background: #f1f5f9; border-radius: 12px; padding: 10px; font-size: 11px; font-weight: 700; color: #475569; border: 1px solid #e2e8f0; }
+        .filter-pill { padding: 6px 14px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; cursor: pointer; border: 1px solid #e2e8f0; color: #94a3b8; }
+        .filter-pill.active { background: #1e293b; color: white; border-color: #1e293b; }
     </style>
 </head>
 <body class="flex justify-center items-center min-h-screen p-4">
 
-    <div class="app-container bg-white rounded-[3rem] shadow-2xl border-[8px] border-gray-300">
+    <div class="app-container rounded-[3.5rem] shadow-2xl border-[10px] border-slate-800">
         
-        <section id="screen-login" class="screen active-screen p-8 justify-center">
-            <h1 class="text-4xl italic text-orange-300 font-serif mb-12 text-center">Todo - List</h1>
-            <div class="space-y-4">
-                <input id="login-user" type="text" placeholder="User" class="w-full border-b border-gray-300 p-2 text-sm outline-none">
-                <input id="login-pass" type="password" placeholder="Password" class="w-full border-b border-gray-300 p-2 text-sm outline-none">
-                <button onclick="handleLogin()" class="w-24 bg-orange-200 py-1 rounded text-sm font-semibold mt-4">Submit</button>
-                <div class="flex justify-between text-[10px] text-blue-500">
-                    <a href="#">Forgot the password?</a> <a href="#" onclick="navigate('screen-signup')" class="font-bold">Sign up</a>
-                </div>
+        <button id="global-add-btn" onclick="openModal(null)" class="hidden btn-primary text-white w-14 h-14 rounded-2xl shadow-xl flex items-center justify-center text-2xl z-50">
+            <i class="fas fa-plus"></i>
+        </button>
+
+        <section id="screen-login" class="screen active-screen p-10 justify-center">
+            <div class="text-center mb-12">
+                <div class="w-16 h-16 bg-amber-400 rounded-2xl rotate-12 mx-auto mb-4 flex items-center justify-center shadow-lg"><i class="fas fa-check-double text-white text-2xl -rotate-12"></i></div>
+                <h1 class="text-3xl font-extrabold text-slate-800">FocusFlow</h1>
             </div>
-            <p id="login-error" class="text-red-500 text-[10px] mt-4 text-center hidden italic">User not found or incorrect password.</p>
+            <div class="space-y-6">
+                <input id="login-user" type="text" placeholder="Usuário" class="modern-input w-full p-3 text-sm">
+                <input id="login-pass" type="password" placeholder="Senha" class="modern-input w-full p-3 text-sm">
+                <button onclick="handleLogin()" class="btn-primary w-full py-3 rounded-xl text-white text-sm font-bold uppercase">Entrar</button>
+                <button onclick="navigate('screen-signup')" class="w-full text-[11px] text-amber-600 font-bold">Criar Conta</button>
+            </div>
+            <p id="login-error" class="text-red-500 text-[11px] mt-6 text-center hidden italic font-semibold">Credenciais inválidas.</p>
         </section>
 
-        <section id="screen-signup" class="screen p-8 justify-center">
-            <h1 class="text-3xl italic text-orange-300 font-serif mb-8 text-center">New Account</h1>
-            <div class="space-y-4 text-center">
-                <input id="reg-user" type="text" placeholder="Username" class="w-full border-b border-gray-300 p-2 text-sm outline-none">
-                <input id="reg-pass" type="password" placeholder="Password" class="w-full border-b border-gray-300 p-2 text-sm outline-none">
-                <button onclick="handleSignup()" class="w-24 bg-orange-200 py-1 rounded text-sm font-semibold mt-4">Register</button>
-                <a href="#" onclick="navigate('screen-login')" class="block text-[10px] text-blue-500 mt-4">Back to Login</a>
+        <section id="screen-signup" class="screen p-10 justify-center">
+            <h1 class="text-3xl font-extrabold text-slate-800 mb-8">Novo Usuário</h1>
+            <div class="space-y-6">
+                <input id="reg-user" type="text" placeholder="Nome de usuário" class="modern-input w-full p-3 text-sm">
+                <input id="reg-pass" type="password" placeholder="Senha" class="modern-input w-full p-3 text-sm">
+                <button onclick="handleSignup()" class="btn-primary w-full py-3 rounded-xl text-white text-sm font-bold uppercase">Registrar</button>
+                <button onclick="navigate('screen-login')" class="w-full text-[11px] text-slate-500 font-bold uppercase mt-2">Voltar</button>
             </div>
         </section>
 
-        <section id="screen-list" class="screen pt-12">
-            <div class="px-8">
-                <h1 class="text-3xl italic text-orange-300 font-serif">MY LIST</h1>
-                <p id="display-date" class="text-xs font-bold text-gray-800 mt-1">Today --/--/--</p>
+        <section id="screen-list" class="screen pt-14 px-8">
+            <div class="flex justify-between items-start mb-6">
+                <div><h1 class="text-2xl font-black text-slate-800 tracking-tight uppercase">Hoje</h1><p id="display-date" class="text-[11px] font-bold text-amber-500 uppercase"></p></div>
+                <button onclick="handleLogout()" class="text-slate-300 hover:text-red-400"><i class="fas fa-sign-out-alt text-lg"></i></button>
             </div>
-            <div id="list-items-today" class="flex-1 px-8 mt-8 overflow-y-auto space-y-3 pb-20"></div>
-            <button onclick="openModal(null)" class="absolute bottom-24 right-8 bg-orange-200 text-white w-12 h-12 rounded-full text-2xl shadow-lg">+</button>
-            <nav class="bg-slate-500 p-4 flex justify-around items-center rounded-b-[2rem]">
-                <button onclick="navigate('screen-list')" class="text-orange-200"><i class="fas fa-list-ul"></i></button>
-                <button onclick="navigate('screen-analytics')" class="text-gray-300"><i class="fas fa-chart-bar"></i></button>
-                <button onclick="navigate('screen-calendar')" class="text-gray-300"><i class="fas fa-calendar-alt"></i></button>
-            </nav>
+            <div class="flex gap-2 mb-6">
+                <div onclick="setFilter('all')" id="filter-all" class="filter-pill active">Todas</div>
+                <div onclick="setFilter('pending')" id="filter-pending" class="filter-pill">Pendentes</div>
+                <div onclick="setFilter('done')" id="filter-done" class="filter-pill">Concluídas</div>
+            </div>
+            <div id="list-items-today" class="flex-1 overflow-y-auto space-y-4 pb-32"></div>
         </section>
 
-        <section id="screen-analytics" class="screen pt-12">
-            <div class="px-8 mb-6"><h1 class="text-3xl italic text-orange-300 font-serif">Analytics</h1></div>
-            <div class="flex-1 px-8 flex flex-col items-center">
-                <select id="analytics-period" onchange="updateAnalytics()" class="self-start text-[10px] border border-blue-400 text-blue-400 rounded px-2 mb-4">
-                    <option value="weekly">Weekly</option>
-                    <option value="monthly">Monthly</option>
+        <section id="screen-analytics" class="screen pt-14 px-8">
+            <h1 class="text-2xl font-black text-slate-800 mb-6 tracking-tight">INSIGHTS</h1>
+            <div class="flex-1 flex flex-col items-center">
+                <select id="analytics-period" onchange="updateAnalytics()" class="bg-white text-[10px] font-bold rounded-lg shadow-sm px-4 py-2 mb-8 outline-none border border-slate-100">
+                    <option value="weekly">Visão Semanal</option>
+                    <option value="monthly">Visão Mensal</option>
                 </select>
-                <div id="pie-chart" class="w-40 h-40 flex items-center justify-center">
-                    <div class="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-md">
-                        <span id="perc-text" class="text-xl font-bold text-teal-500">0%</span>
+                <div id="pie-chart" class="w-48 h-48 rounded-full flex items-center justify-center shadow-lg transition-all duration-500">
+                    <div class="w-36 h-36 bg-white rounded-full flex flex-col items-center justify-center">
+                        <span id="perc-text" class="text-3xl font-black text-slate-800">0%</span>
+                        <span class="text-[9px] text-slate-400 font-bold uppercase">Concluído</span>
                     </div>
                 </div>
-                <div class="mt-8 w-full space-y-4 text-[10px] font-bold">
-                    <div class="flex justify-between">
-                        <span class="text-teal-500">DONE: <span id="stat-done">0</span>%</span>
-                        <span class="text-blue-300">UNDONE: <span id="stat-undone">0</span>%</span>
-                    </div>
-                    <div class="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
-                        <div id="progress-bar" class="bg-teal-400 h-full transition-all" style="width: 0%"></div>
-                    </div>
+                <div class="mt-10 w-full grid grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100"><p class="text-[9px] font-bold text-slate-400 uppercase">Sucesso</p><p id="stat-done" class="text-xl font-bold text-emerald-500">0%</p></div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100"><p class="text-[9px] font-bold text-slate-400 uppercase">Pendentes</p><p id="stat-undone" class="text-xl font-bold text-amber-500">0%</p></div>
                 </div>
+                <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden mt-8"><div id="progress-bar" class="bg-emerald-400 h-full transition-all duration-700"></div></div>
             </div>
-            <nav class="bg-slate-500 p-4 flex justify-around items-center">
-                <button onclick="navigate('screen-list')" class="text-gray-300"><i class="fas fa-list-ul"></i></button>
-                <button onclick="navigate('screen-analytics')" class="text-orange-200"><i class="fas fa-chart-bar"></i></button>
-                <button onclick="navigate('screen-calendar')" class="text-gray-300"><i class="fas fa-calendar-alt"></i></button>
-            </nav>
         </section>
 
-        <section id="screen-calendar" class="screen pt-12">
-            <div class="px-8"><h1 class="text-3xl italic text-orange-300 font-serif">Calendar</h1></div>
-            <div class="px-8 mt-4 flex-1">
-                <input type="date" id="calendar-filter" onchange="renderCalendar()" class="w-full bg-zinc-700 text-white p-2 rounded text-xs mb-4 outline-none">
-                <div id="calendar-list" class="space-y-2 overflow-y-auto max-h-[400px]"></div>
-            </div>
-            <nav class="bg-slate-500 p-4 flex justify-around items-center mt-auto">
-                <button onclick="navigate('screen-list')" class="text-gray-300"><i class="fas fa-list-ul"></i></button>
-                <button onclick="navigate('screen-analytics')" class="text-gray-300"><i class="fas fa-chart-bar"></i></button>
-                <button onclick="navigate('screen-calendar')" class="text-orange-200"><i class="fas fa-calendar-alt"></i></button>
-            </nav>
+        <section id="screen-calendar" class="screen pt-14 px-8">
+            <h1 class="text-2xl font-black text-slate-800 mb-6 tracking-tight">AGENDA</h1>
+            <input type="date" id="calendar-filter" onchange="renderCalendar()" class="w-full bg-white border border-slate-100 shadow-sm p-4 rounded-2xl text-xs font-bold mb-6 outline-none">
+            <div id="calendar-list" class="flex-1 space-y-3 overflow-y-auto pb-32"></div>
         </section>
 
-        <div id="modal-task" class="hidden absolute inset-0 bg-black/50 flex items-end z-50">
-            <div class="bg-zinc-800 w-full p-6 rounded-t-[2rem]">
-                <div class="flex justify-between items-center mb-4">
-                    <button onclick="toggleModalStar()" id="modal-star" class="text-gray-500 text-xl"><i class="fas fa-star"></i></button>
-                    <button onclick="closeModal()" class="text-orange-200 bg-white/10 rounded-full w-6 h-6 flex items-center justify-center">✕</button>
+        <nav id="global-nav" class="hidden bg-slate-900 mx-6 mb-6 p-4 flex justify-around items-center rounded-[2rem] shadow-2xl absolute bottom-0 left-0 right-0 z-30">
+            <button onclick="navigate('screen-list')" id="nav-list" class="text-slate-500"><i class="fas fa-home"></i></button>
+            <button onclick="navigate('screen-analytics')" id="nav-analytics" class="text-slate-500"><i class="fas fa-chart-pie"></i></button>
+            <button onclick="navigate('screen-calendar')" id="nav-calendar" class="text-slate-500"><i class="fas fa-calendar-alt"></i></button>
+        </nav>
+
+        <div id="modal-task" class="hidden absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-end z-50">
+            <div class="bg-white w-full p-8 rounded-t-[3rem] shadow-2xl">
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="toggleModalStar()" id="modal-star" class="text-slate-300 text-2xl"><i class="fas fa-star"></i></button>
+                    <button onclick="closeModal()" class="text-slate-400 bg-slate-100 rounded-full w-8 h-8 flex items-center justify-center">✕</button>
                 </div>
-                
-                <input id="in-title" type="text" placeholder="Task Name" class="w-full p-2 mb-2 rounded text-sm outline-none">
-                <textarea id="in-desc" placeholder="Description" class="w-full p-2 mb-2 rounded text-xs h-16 outline-none"></textarea>
-                
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="text-[10px] text-white font-bold uppercase">Priority:</span>
-                    <select id="in-priority" class="bg-zinc-700 text-white text-[10px] p-1 rounded outline-none">
-                        <option value="3">Low (3)</option>
-                        <option value="2">Medium (2)</option>
-                        <option value="1">High (1)</option>
+                <input id="in-title" type="text" placeholder="Nome da tarefa" class="w-full p-2 mb-4 rounded-xl text-lg font-bold border-b-2 border-slate-100 outline-none">
+                <textarea id="in-desc" placeholder="Notas..." class="w-full p-4 mb-4 rounded-xl text-sm h-16 bg-slate-50 outline-none resize-none"></textarea>
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <input type="date" id="in-date" class="modal-field w-full outline-none">
+                    <input type="time" id="in-time" class="modal-field w-full outline-none">
+                </div>
+                <div class="flex gap-3 mb-8">
+                    <select id="in-priority" class="modal-field flex-1 outline-none">
+                        <option value="3">Baixa</option><option value="2">Média</option><option value="1">Alta!</option>
                     </select>
+                    <button id="btn-complete-modal" onclick="toggleCompleteInModal()" class="modal-field flex-1 text-white bg-slate-800 border-none transition-colors">Concluir</button>
                 </div>
-
-                <div class="flex justify-between items-center">
-                    <div class="flex gap-1">
-                        <input type="date" id="in-date" class="bg-red-400 text-white text-[9px] p-1 rounded">
-                        <input type="time" id="in-time" class="bg-red-400 text-white text-[9px] p-1 rounded">
-                    </div>
-                    <div class="flex gap-2">
-                        <button id="btn-delete" onclick="deleteTask()" class="text-orange-200 hidden"><i class="fas fa-trash"></i></button>
-                        <button onclick="saveTask()" class="bg-orange-200 text-zinc-800 px-4 py-1 rounded text-[10px] font-bold uppercase">Save</button>
-                    </div>
+                <div class="flex gap-4">
+                     <button id="btn-delete" onclick="deleteTask()" class="w-14 h-14 rounded-2xl bg-red-50 text-red-500 hidden"><i class="fas fa-trash-alt"></i></button>
+                     <button onclick="saveTask()" class="btn-primary flex-1 h-14 rounded-2xl text-white font-black uppercase text-sm">Salvar</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-       // Gerar data dinâmica
         const agora = new Date();
         const hojeISO = agora.toLocaleDateString('en-CA'); 
-        const dataBR = agora.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
-    
-        // Atualizar o texto na interface
-        document.addEventListener("DOMContentLoaded", () => {
-            const display = document.getElementById('display-date');
-            if(display) display.innerText = `Today ${dataBR}`;
-        });
-    
-        let tasks = JSON.parse(localStorage.getItem('tasks_vFinal')) || [];
-        let users = JSON.parse(localStorage.getItem('app_users')) || [];
-        let isStarred = false;
+        const hojeBR = agora.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+        document.getElementById('display-date').innerText = hojeBR;
+        document.getElementById('calendar-filter').value = hojeISO;
 
-        // AUTH
+        let tasks = JSON.parse(localStorage.getItem('tasks_vFinal')) || [];
+        let isStarred = false;
+        let editingId = null;
+        let currentFilter = 'all';
+        let tempDoneStatus = false;
+
         function handleSignup() {
-            const u = document.getElementById('reg-user').value;
-            const p = document.getElementById('reg-pass').value;
-            if(!u || !p) return alert("Preencha os campos!");
+            const u = document.getElementById('reg-user').value.trim();
+            const p = document.getElementById('reg-pass').value.trim();
+            if(!u || !p) return;
+            let users = JSON.parse(localStorage.getItem('app_users')) || [];
             users.push({username: u, password: p});
             localStorage.setItem('app_users', JSON.stringify(users));
-            alert("Registrado!"); navigate('screen-login');
+            alert("Sucesso!"); navigate('screen-login');
         }
 
         function handleLogin() {
-            const u = document.getElementById('login-user').value;
-            const p = document.getElementById('login-pass').value;
+            const u = document.getElementById('login-user').value.trim();
+            const p = document.getElementById('login-pass').value.trim();
+            const users = JSON.parse(localStorage.getItem('app_users')) || [];
             if(users.find(x => x.username === u && x.password === p)) {
-                navigate('screen-list'); renderAll();
+                document.getElementById('global-add-btn').classList.remove('hidden');
+                document.getElementById('global-nav').classList.remove('hidden');
+                navigate('screen-list');
+                renderAll();
             } else { document.getElementById('login-error').classList.remove('hidden'); }
         }
 
-        // NAVIGATION
+        function handleLogout() {
+            document.getElementById('global-add-btn').classList.add('hidden');
+            document.getElementById('global-nav').classList.add('hidden');
+            navigate('screen-login');
+        }
+
         function navigate(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
             document.getElementById(id).classList.add('active-screen');
-            if(id === 'screen-analytics') updateAnalytics();
+            document.querySelectorAll('#global-nav button').forEach(b => b.classList.remove('text-amber-400'));
+            if(id === 'screen-list') { document.getElementById('nav-list').classList.add('text-amber-400'); renderToday(); }
+            if(id === 'screen-analytics') { document.getElementById('nav-analytics').classList.add('text-amber-400'); updateAnalytics(); }
+            if(id === 'screen-calendar') { document.getElementById('nav-calendar').classList.add('text-amber-400'); renderCalendar(); }
         }
 
-        // CORE ACTIONS
+        function setFilter(f) {
+            currentFilter = f;
+            document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            document.getElementById('filter-' + f).classList.add('active');
+            renderToday();
+        }
+
         function save() { localStorage.setItem('tasks_vFinal', JSON.stringify(tasks)); renderAll(); }
         function toggle(id) { tasks = tasks.map(t => t.id === id ? {...t, done: !t.done} : t); save(); }
 
         function renderToday() {
             const list = document.getElementById('list-items-today');
             list.innerHTML = '';
-            const filtered = tasks.filter(t => t.date === hojeISO);
+            let filtered = tasks.filter(t => t.date === hojeISO);
+            if(currentFilter === 'pending') filtered = filtered.filter(t => !t.done);
+            if(currentFilter === 'done') filtered = filtered.filter(t => t.done);
             filtered.sort((a, b) => a.priority - b.priority);
-
             filtered.forEach(t => {
-                list.innerHTML += `
-                <div class="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm priority-${t.priority} mb-2" onclick="openModal(${t.id})">
-                    <div class="flex flex-1 items-center gap-3">
-                        <input type="checkbox" ${t.done ? 'checked' : ''} onclick="event.stopPropagation(); toggle(${t.id})" class="accent-orange-300">
-                        <div class="flex flex-col">
-                            <span class="text-sm ${t.done ? 'line-through text-gray-400' : 'text-zinc-700'} font-semibold">${t.text}</span>
-                            ${t.desc ? `<span class="text-[10px] text-gray-400 italic">${t.desc}</span>` : ''}
-                        </div>
-                    </div>
-                    ${t.starred ? '<i class="fas fa-star text-orange-300 text-[10px] ml-2"></i>' : ''}
-                </div>`;
+                list.innerHTML += `<div class="task-card flex items-center justify-between p-5 rounded-2xl shadow-sm priority-${t.priority}" onclick="openModal(${t.id})">
+                    <div class="flex items-center gap-4"><div onclick="event.stopPropagation(); toggle(${t.id})" class="w-6 h-6 rounded-full border-2 border-slate-200 flex items-center justify-center ${t.done ? 'bg-emerald-400 border-emerald-400' : ''}">${t.done ? '<i class="fas fa-check text-[10px] text-white"></i>' : ''}</div>
+                    <div class="flex flex-col"><span class="text-sm font-bold ${t.done ? 'line-through text-slate-300' : 'text-slate-700'}">${t.text}</span><span class="text-[10px] text-slate-400 font-bold">${t.time}</span></div></div></div>`;
             });
         }
 
         function updateAnalytics() {
             const period = document.getElementById('analytics-period').value;
-            const today = new Date(hojeISO + 'T00:00:00');
+            const hojeRef = new Date(hojeISO + 'T00:00:00');
             let filtered = [];
-
             if (period === 'weekly') {
-                const first = new Date(today); first.setDate(today.getDate() - today.getDay());
-                const last = new Date(first); last.setDate(first.getDate() + 6);
-                filtered = tasks.filter(t => {
-                    const d = new Date(t.date + 'T00:00:00');
-                    return d >= first && d <= last;
-                });
+                const inicioSemana = new Date(hojeRef); inicioSemana.setDate(hojeRef.getDate() - hojeRef.getDay());
+                const fimSemana = new Date(inicioSemana); fimSemana.setDate(inicioSemana.getDate() + 6);
+                filtered = tasks.filter(t => { const d = new Date(t.date + 'T00:00:00'); return d >= inicioSemana && d <= fimSemana; });
             } else {
-                filtered = tasks.filter(t => t.date.startsWith(hojeISO.substring(0, 7)));
+                const mesAtual = hojeISO.substring(0, 7);
+                filtered = tasks.filter(t => t.date.startsWith(mesAtual));
             }
-
             const total = filtered.length;
             const done = filtered.filter(t => t.done).length;
             const perc = total > 0 ? Math.round((done / total) * 100) : 0;
-
             document.getElementById('perc-text').innerText = perc + '%';
-            document.getElementById('stat-done').innerText = perc;
-            document.getElementById('stat-undone').innerText = 100 - perc;
+            document.getElementById('stat-done').innerText = perc + '%';
+            document.getElementById('stat-undone').innerText = (total === 0 ? 0 : 100 - perc) + '%';
             document.getElementById('progress-bar').style.width = perc + '%';
-            document.getElementById('pie-chart').style.background = total === 0 ? '#f3f4f6' : `conic-gradient(#5eead4 0% ${perc}%, #bfdbfe ${perc}% 100%)`;
+            document.getElementById('pie-chart').style.background = total === 0 ? '#f1f5f9' : `conic-gradient(#10b981 0% ${perc}%, #f1f5f9 ${perc}% 100%)`;
         }
 
         function renderCalendar() {
@@ -233,23 +233,15 @@
             const filtered = tasks.filter(t => t.date === date);
             list.innerHTML = '';
             filtered.forEach(t => {
-                list.innerHTML += `<div onclick="openModal(${t.id})" class="p-2 bg-gray-50 rounded border-l-2 border-orange-200 text-xs flex justify-between items-center">
-                    <div class="flex flex-col">
-                        <span>${t.text}</span>
-                        <span class="text-[8px] text-gray-400">${t.desc || ''}</span>
-                    </div>
-                    <div class="flex gap-2 items-center">
-                        ${t.starred ? '<i class="fas fa-star text-orange-300"></i>' : ''}
-                    </div>
-                </div>`;
+                list.innerHTML += `<div onclick="openModal(${t.id})" class="p-5 bg-white rounded-2xl shadow-sm border-l-4 border-amber-400 flex justify-between items-center task-card ${t.done ? 'opacity-50' : ''}">
+                    <div><p class="text-sm font-bold text-slate-700">${t.text}</p><p class="text-[10px] text-slate-400 font-bold">${t.time} ${t.done ? '(Concluída)' : ''}</p></div></div>`;
             });
         }
 
-        // MODAL ACTIONS
-        let editingId = null;
         function openModal(id) {
             editingId = id;
             document.getElementById('modal-task').classList.remove('hidden');
+            const btnComplete = document.getElementById('btn-complete-modal');
             if(id) {
                 const t = tasks.find(x => x.id === id);
                 document.getElementById('in-title').value = t.text;
@@ -257,51 +249,38 @@
                 document.getElementById('in-date').value = t.date;
                 document.getElementById('in-time').value = t.time;
                 document.getElementById('in-priority').value = t.priority;
-                isStarred = t.starred;
+                isStarred = t.starred; tempDoneStatus = t.done;
                 document.getElementById('btn-delete').classList.remove('hidden');
+                btnComplete.classList.remove('hidden'); updateCompleteBtnUI();
             } else {
-                document.getElementById('in-title').value = '';
-                document.getElementById('in-desc').value = '';
-                document.getElementById('in-priority').value = '3';
-                isStarred = false;
-                document.getElementById('btn-delete').classList.add('hidden');
+                document.getElementById('in-title').value = ''; document.getElementById('in-desc').value = '';
+                document.getElementById('in-date').value = document.getElementById('calendar-filter').value || hojeISO;
+                document.getElementById('in-time').value = "12:00"; document.getElementById('in-priority').value = '3';
+                isStarred = false; tempDoneStatus = false;
+                document.getElementById('btn-delete').classList.add('hidden'); btnComplete.classList.add('hidden');
             }
             updateModalStarUI();
         }
 
-        function toggleModalStar() { isStarred = !isStarred; updateModalStarUI(); }
-        function updateModalStarUI() {
-            const star = document.getElementById('modal-star');
-            star.className = isStarred ? 'text-orange-300 text-xl' : 'text-gray-500 text-xl';
+        function toggleCompleteInModal() { tempDoneStatus = !tempDoneStatus; updateCompleteBtnUI(); }
+        function updateCompleteBtnUI() { 
+            const btn = document.getElementById('btn-complete-modal'); 
+            btn.innerText = tempDoneStatus ? "Tarefa Concluída!" : "Concluir";
+            btn.style.backgroundColor = tempDoneStatus ? "#10b981" : "#1e293b";
         }
-
+        function toggleModalStar() { isStarred = !isStarred; updateModalStarUI(); }
+        function updateModalStarUI() { document.getElementById('modal-star').className = isStarred ? 'text-amber-400 text-2xl' : 'text-slate-200 text-2xl'; }
         function closeModal() { document.getElementById('modal-task').classList.add('hidden'); }
-
         function saveTask() {
-            const data = {
-                text: document.getElementById('in-title').value,
-                desc: document.getElementById('in-desc').value,
-                date: document.getElementById('in-date').value,
-                time: document.getElementById('in-time').value,
-                priority: document.getElementById('in-priority').value,
-                starred: isStarred
-            };
-            if(!data.text) return;
+            const title = document.getElementById('in-title').value.trim();
+            if(!title) return;
+            const data = { text: title, desc: document.getElementById('in-desc').value, date: document.getElementById('in-date').value, time: document.getElementById('in-time').value, priority: document.getElementById('in-priority').value, starred: isStarred, done: tempDoneStatus };
             if(editingId) tasks = tasks.map(t => t.id === editingId ? {...t, ...data} : t);
             else tasks.push({...data, id: Date.now(), done: false});
             closeModal(); save();
         }
-        
-        function deleteTask() { tasks = tasks.filter(t => t.id !== editingId); closeModal(); save(); }
+        function deleteTask() { if(confirm("Excluir?")) { tasks = tasks.filter(t => t.id !== editingId); closeModal(); save(); } }
         function renderAll() { renderToday(); renderCalendar(); updateAnalytics(); }
-        document.getElementById('calendar-filter').value = hojeISO;
-        // Formata a data para o padrão brasileiro DD/MM/YY
-        const dataFormatada = agora.toLocaleDateString('pt-BR', { 
-            day: '2-digit', 
-            month: '2-digit', 
-            year: '2-digit' 
-        });
-        document.getElementById('display-date').innerText = `Today ${dataFormatada}`;
     </script>
 </body>
 </html>
