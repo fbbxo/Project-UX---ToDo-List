@@ -48,7 +48,7 @@
         <section id="screen-list" class="screen pt-12">
             <div class="px-8">
                 <h1 class="text-3xl italic text-orange-300 font-serif">MY LIST</h1>
-                <p class="text-xs font-bold text-gray-800 mt-1">Today 16/03/26</p>
+                <p id="display-date" class="text-xs font-bold text-gray-800 mt-1">Today --/--/--</p>
             </div>
             <div id="list-items-today" class="flex-1 px-8 mt-8 overflow-y-auto space-y-3 pb-20"></div>
             <button onclick="openModal(null)" class="absolute bottom-24 right-8 bg-orange-200 text-white w-12 h-12 rounded-full text-2xl shadow-lg">+</button>
@@ -135,7 +135,17 @@
     </div>
 
     <script>
-        const hojeISO = "2026-03-16";
+       // Gerar data dinâmica
+        const agora = new Date();
+        const hojeISO = agora.toLocaleDateString('en-CA'); 
+        const dataBR = agora.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+    
+        // Atualizar o texto na interface
+        document.addEventListener("DOMContentLoaded", () => {
+            const display = document.getElementById('display-date');
+            if(display) display.innerText = `Today ${dataBR}`;
+        });
+    
         let tasks = JSON.parse(localStorage.getItem('tasks_vFinal')) || [];
         let users = JSON.parse(localStorage.getItem('app_users')) || [];
         let isStarred = false;
@@ -281,10 +291,17 @@
             else tasks.push({...data, id: Date.now(), done: false});
             closeModal(); save();
         }
-
+        
         function deleteTask() { tasks = tasks.filter(t => t.id !== editingId); closeModal(); save(); }
         function renderAll() { renderToday(); renderCalendar(); updateAnalytics(); }
         document.getElementById('calendar-filter').value = hojeISO;
+        // Formata a data para o padrão brasileiro DD/MM/YY
+        const dataFormatada = agora.toLocaleDateString('pt-BR', { 
+            day: '2-digit', 
+            month: '2-digit', 
+            year: '2-digit' 
+        });
+        document.getElementById('display-date').innerText = `Today ${dataFormatada}`;
     </script>
 </body>
 </html>
