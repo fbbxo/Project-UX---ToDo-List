@@ -1,4 +1,4 @@
-# 📝 My List - Todo App
+# 📝 My List - Todo App (FOCUSFLOW)
 
 Projeto de um gerenciador de tarefas inteligente, focado em organização diária e análise de produtividade, desenvolvido como parte do curso de Sistemas para Internet.
 
